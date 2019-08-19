@@ -7,6 +7,8 @@ using RamasPieShop.Models;
 
 namespace RamasPieShop
 {
+    
+    //https://app.pluralsight.com/player?course=building-first-aspdotnet-core-2-mvc-application&author=gill-cleeren&name=ed7ff1a2-0c00-485a-857c-4e2ee859095b&clip=7&mode=live
     public class Startup
     {
               
@@ -17,6 +19,7 @@ namespace RamasPieShop
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer("Server=CESCHNDES-0161;Database=RamaDemo123;Trusted_Connection=True;MultipleActiveResultSets=true"));
             services.AddTransient<IPieRepository, PieRepository>();
+            services.AddTransient<IFeedbackRepository, FeedbackRepository>();
             services.AddMvc();
         }
 
@@ -26,7 +29,15 @@ namespace RamasPieShop
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            app.UseAuthentication();
+            // app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}"
+                    );
+            });
         }
     }
 }
